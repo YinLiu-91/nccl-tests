@@ -52,8 +52,8 @@ thread_local int is_main_thread = 0;
 // Command line parameter defaults
 static int nThreads = 1;
 static int nGpus = 1;
-static size_t minBytes = 32*1024*1024;
-static size_t maxBytes = 32*1024*1024;
+static size_t minBytes = 1024;
+static size_t maxBytes = 1024;
 static size_t stepBytes = 1*1024*1024;
 static size_t stepFactor = 1;
 static int datacheck = 1;

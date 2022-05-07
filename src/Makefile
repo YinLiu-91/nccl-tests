@@ -3,11 +3,11 @@
 #
 # See LICENSE.txt for license information
 #
-
+# 编译方法： make MPI=1 MPI_HOME=/usr/lib/x86_64-linux-gnu/openmpi  CUDA_HOME=/usr/local/cuda  NCCL_HOME=/home/liu/documents/work/cuda/nccl/build
 CUDA_HOME ?= /usr/local/cuda
 PREFIX ?= /usr/local
 VERBOSE ?= 0
-DEBUG ?= 0
+DEBUG ?= 1
 
 CUDA_LIB ?= $(CUDA_HOME)/lib64
 CUDA_INC ?= $(CUDA_HOME)/include
@@ -21,14 +21,11 @@ CUDA_MAJOR = $(shell echo $(CUDA_VERSION) | cut -d "." -f 1)
 ifeq ($(shell test "0$(CUDA_MAJOR)" -ge 11; echo $$?),0)
 NVCC_GENCODE ?= -gencode=arch=compute_60,code=sm_60 \
                 -gencode=arch=compute_61,code=sm_61 \
-                -gencode=arch=compute_70,code=sm_70 \
-                -gencode=arch=compute_80,code=sm_80 \
-                -gencode=arch=compute_80,code=compute_80
+                -gencode=arch=compute_70,code=sm_70 
+                # -gencode=arch=compute_80,code=sm_80 \
+                # -gencode=arch=compute_80,code=compute_80
 else
-NVCC_GENCODE ?= -gencode=arch=compute_35,code=sm_35 \
-                -gencode=arch=compute_50,code=sm_50 \
-                -gencode=arch=compute_60,code=sm_60 \
-                -gencode=arch=compute_61,code=sm_61 \
+NVCC_GENCODE ?= -gencode=arch=compute_61,code=sm_61 \
                 -gencode=arch=compute_70,code=sm_70 \
                 -gencode=arch=compute_70,code=compute_70
 endif
@@ -42,7 +39,7 @@ ifeq ($(DEBUG), 0)
 NVCUFLAGS += -O3 -g
 CXXFLAGS  += -O3 -g
 else
-NVCUFLAGS += -O0 -G -g
+NVCUFLAGS += -O0 -G -g -Wno-deprecated-gpu-targets
 CXXFLAGS  += -O0 -g -ggdb3
 endif
 
